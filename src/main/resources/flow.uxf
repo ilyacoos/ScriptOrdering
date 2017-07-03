@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.2">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.baselet.element.old.allinone.ActivityDiagramText</type>
+    <coordinates>
+      <x>20</x>
+      <y>20</y>
+      <w>481</w>
+      <h>581</h>
+    </coordinates>
+    <panel_attributes>title:logic flow
+Start
+
+[if dir]
+
+Filter : *.SQL
+
+While
+	Take file
+	If
+		[Found in other]
+		recursive search
+
+		[Not found]
+		print name
+	EndIf
+End
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
