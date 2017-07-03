@@ -88,21 +88,4 @@ public class Main {
 			return m.find();
 		}
 	}
-	
-	{      Pattern p = Pattern.compile(REGEX);
-	      Matcher m = p.matcher(INPUT);   // get a matcher object
-	      int count = 0;
-	      
-	      File f = new File("");
-	      f.isDirectory();
-
-	      while(m.find()) {
-	         count++;
-	         //System.out.println("Match number "+count);
-	         //System.out.println("start(): "+m.start());
-	         //System.out.println("end(): "+m.end());
-	         System.out.println( INPUT.substring(m.start(), m.end()) );
-	      }
-	}
-
 }
