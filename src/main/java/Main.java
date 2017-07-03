@@ -36,30 +36,56 @@ public class Main {
 
 			scripts.add(new Script(file));
 		
-		searchDependence(scripts);
-		searchDependence(scripts);
+		while (scripts.size() > 0) searchDependence(scripts);
 	}
 	
 	private static void searchDependence(ArrayList<Script> scripts){
 		Script script = scripts.remove(0);
+				
+		for(Script s : scripts){
+			if( script.find( s.schema, s.object ) )
+				searchDependence(scripts);
+		}
 		
-		System.out.println( script.contents );
+		System.out.println( script.fName );
 	}
 	
 	private static class Script{
-		File f;
+		File file;
 		String contents;
 		String schema;
-		String name;
+		String object;
+		String fName;
 		ArrayList depends;
 		
-		public Script(File f) {
-			this.f = f;
-			 try {
-				this.contents = new String(Files.readAllBytes(Paths.get(f.toURI())), "cp1251");
+		public Script(File file) {
+			this.file = file;
+			this.fName = file.getName();
+			
+			Pattern p = Pattern.compile("([^.]*)[.]([^.]*)");
+			Matcher m = p.matcher(file.getName());
+			
+			if ( m.find() ) {
+			    this.schema = m.group(1);
+			    this.object = m.group(2);
+			}
+			
+			try {
+				this.contents = new String(Files.readAllBytes(Paths.get(file.toURI())), "cp1251");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		}
+		
+		boolean find(String schema, String object){
+			String pattern;
+			if( this.schema == schema )
+				pattern = "(" + schema + "[.])?" + object + "";
+			else
+				pattern = schema + "[.]" + object;
+			Pattern p = Pattern.compile( pattern, Pattern.CASE_INSENSITIVE );
+			Matcher m = p.matcher( this.contents );
+			return m.find();
 		}
 	}
 	
