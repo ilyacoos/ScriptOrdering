@@ -47,12 +47,12 @@ public class Main {
 	}
 	
 	private static void searchDependence(Script script){
+		script.checked = true;
+		
 		for(Script s : scripts){
-			if( script != s && !s.checked && script.find( s.schema, s.object ) )
+			if( !s.checked && script.find( s.schema, s.object ) )
 				searchDependence(s);
 		}
-		
-		script.checked = true;
 		System.out.println( script.fName );
 	}
 	
