@@ -13,8 +13,7 @@ import java.util.regex.Pattern;
 
 
 public class Main {
-   private static final String REGEX = "\\b\\w\\b";
-   private static final String INPUT = "cat cat cat cattie cat";
+	private static ArrayList<Script> scripts = new ArrayList<Script>(); 
    
    /**
     * Input - path with scripts folder; Output - dependency order
@@ -30,23 +29,30 @@ public class Main {
 		
 
 		//Take SQL-files
-		ArrayList<Script> scripts = new ArrayList<Script>();
-		for(File file : dir.listFiles(new FilenameFilter(){
-			public boolean accept(File dir, String name) {return name.toUpperCase().endsWith(".SQL");}} ))
-
-			scripts.add(new Script(file));
+		FilenameFilter fileFilter = new FilenameFilter(){
+			public boolean accept(File dir, String name) {
+				return name.toUpperCase().endsWith(".SQL");
+			}
+		};
 		
-		while (scripts.size() > 0) searchDependence(scripts);
+		//Read files
+		for(File file : dir.listFiles( fileFilter )){
+			scripts.add(new Script(file));
+		}
+
+		//Rollout files
+		for(Script script : scripts){
+			if( !script.checked ) searchDependence(script);
+		}
 	}
 	
-	private static void searchDependence(ArrayList<Script> scripts){
-		Script script = scripts.remove(0);
-				
+	private static void searchDependence(Script script){
 		for(Script s : scripts){
-			if( script.find( s.schema, s.object ) )
-				searchDependence(scripts);
+			if( script != s && !s.checked && script.find( s.schema, s.object ) )
+				searchDependence(s);
 		}
 		
+		script.checked = true;
 		System.out.println( script.fName );
 	}
 	
@@ -56,7 +62,7 @@ public class Main {
 		String schema;
 		String object;
 		String fName;
-		ArrayList depends;
+		boolean checked;
 		
 		public Script(File file) {
 			this.file = file;
@@ -79,10 +85,10 @@ public class Main {
 		
 		boolean find(String schema, String object){
 			String pattern;
-			if( this.schema == schema )
-				pattern = "(" + schema + "[.])?" + object + "";
+			if( this.schema.equalsIgnoreCase(schema) )
+				pattern = "\\s([\"\\[]?" + schema + "[\"\\]]?[.])?[\"\\[]?" + object + "[\"\\]]?[.\\s]";
 			else
-				pattern = schema + "[.]" + object;
+				pattern = "\\s[\"\\[]?" + schema + "[\"\\]]?[.][\"\\[]?" + object + "[\"\\]]?[.\\s]";
 			Pattern p = Pattern.compile( pattern, Pattern.CASE_INSENSITIVE );
 			Matcher m = p.matcher( this.contents );
 			return m.find();
