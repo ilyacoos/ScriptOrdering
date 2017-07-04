@@ -2,12 +2,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -57,7 +54,6 @@ public class Main {
 	}
 	
 	private static class Script{
-		File file;
 		String contents;
 		String schema;
 		String object;
@@ -65,7 +61,6 @@ public class Main {
 		boolean checked;
 		
 		public Script(File file) {
-			this.file = file;
 			this.fName = file.getName();
 			
 			Pattern p = Pattern.compile("([^.]*)[.]([^.]*)");
