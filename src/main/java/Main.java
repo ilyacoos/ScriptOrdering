@@ -1,5 +1,4 @@
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -13,11 +12,10 @@ public class Main {
 	private static ArrayList<Script> scripts = new ArrayList<Script>(); 
    
    /**
-    * Input - path with scripts folder; Output - dependency order
+    * Input - path with scripts folder; Output - dependency order in stg output
     * @param args
- * @throws FileNotFoundException 
     */
-	public static void main(String[] args) throws FileNotFoundException  {
+	public static void main(String[] args){
 		File dir = new File(args[0]);
 		
 		//Check if directory
